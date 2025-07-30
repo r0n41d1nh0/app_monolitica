@@ -11,7 +11,7 @@ class AbstractNotification
         NotificationCenter.enqueue_request(
             notification_key: self.key,
             recipient: recipient,
-            channel: 'EMAIL'
+            channel: "EMAIL"
         )
     end
 

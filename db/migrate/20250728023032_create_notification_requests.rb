@@ -11,6 +11,5 @@ class CreateNotificationRequests < ActiveRecord::Migration[8.0]
     end
 
     add_foreign_key :notification_requests, :notification_templates, column: :notification_template_key, primary_key: :key
-
   end
 end
