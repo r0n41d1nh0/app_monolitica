@@ -20,7 +20,7 @@ class AbstractNotification
     end
 
     def self.know_notifications
-        Dir[Rails.root.join('app', 'notifications', '*.rb')].each { |file| require file }
+        Dir[Rails.root.join("app", "notifications", "*.rb")].each { |file| require file }
         self.descendants.index_by(&:key)
     end
 end
