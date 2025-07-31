@@ -9,7 +9,11 @@ class NotificationSenderJob
 
         request.update!(status: :processing)
 
-        notification_class = request.notification_template_key.camelize.constantize
+        notification_class = AbstractNotificacion.known_notifications[request.notification_template_key]
+
+        unless notification_class
+            raise "Clase de notificación no válida o no registrada: #{request.notification_template_key}"
+        end
 
         EmailService.send(
             recipient: request.recipient,
