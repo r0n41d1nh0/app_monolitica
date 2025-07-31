@@ -20,6 +20,6 @@ class NotificationSenderJob
         request.update!(status: :sent, sent_at: Time.current)
     rescue => e
         Rails.logger.error("Error en NotificationSenderJob: #{e.message}")
-        request.update!(status: :failed, provider_response: { error: e.message}) if request
+        request.update!(status: :failed, provider_response: { error: e.message }) if request
     end
 end
