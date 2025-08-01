@@ -3,22 +3,14 @@ class NotificationSenderJob
 
     def perform(notification_request_id)
         request = NotificationRequest.find_by(id: notification_request_id)
-        return unless request
-
-        return unless request.status_queued?
-
+        return unless request && request.queued?
         request.update!(status: :processing)
 
-        notification_class = AbstractNotificacion.known_notifications[request.notification_template_key]
-
-        unless notification_class
-            raise "Clase de notificación no válida o no registrada: #{request.notification_template_key}"
-        end
-
+        template = request.notification_template
         EmailService.send(
             recipient: request.recipient,
-            title: notification_class.title,
-            body: notification_class.body
+            title: template.default_title,
+            body: template.default_body
         )
 
         request.update!(status: :sent, sent_at: Time.current)

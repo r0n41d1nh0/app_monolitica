@@ -1,4 +1,4 @@
-class FooNotifications < AbstractNotification
+class FooNotification < AbstractNotification
     def self.title
         "Título de la notificación"
     end

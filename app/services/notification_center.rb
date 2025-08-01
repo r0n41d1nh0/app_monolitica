@@ -1,8 +1,14 @@
 module NotificationCenter
     def self.enqueue_request(notification_key:, recipient:, channel:)
+        template = NotificationTemplate.find_by(key: notification_key)
+        unless template
+            Rails.logger.error("Plantilla de notificación no encontrada: #{notification_key}")
+            return
+        end
+
         ActiveRecord::Base.transaction do
             request = NotificationRequest.create!(
-                notification_template_key: notification_key,
+                notification_template: template,
                 recipient: recipient,
                 channel: channel,
                 status: :queued

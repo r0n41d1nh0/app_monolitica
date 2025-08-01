@@ -15,7 +15,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_28_023032) do
   enable_extension "pg_catalog.plpgsql"
 
   create_table "notification_requests", force: :cascade do |t|
-    t.string "notification_template_key", null: false
+    t.bigint "notification_template_id", null: false
     t.string "recipient", null: false
     t.string "channel", null: false
     t.string "status", null: false
@@ -23,7 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_28_023032) do
     t.datetime "sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["notification_template_key"], name: "index_notification_requests_on_notification_template_key"
+    t.index ["notification_template_id"], name: "index_notification_requests_on_notification_template_id"
     t.index ["status"], name: "index_notification_requests_on_status"
   end
 
@@ -36,5 +36,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_28_023032) do
     t.index ["key"], name: "index_notification_templates_on_key", unique: true
   end
 
-  add_foreign_key "notification_requests", "notification_templates", column: "notification_template_key", primary_key: "key"
+  add_foreign_key "notification_requests", "notification_templates"
 end
