@@ -7,13 +7,17 @@ class NotificationSenderJob
         request.update!(status: :processing)
 
         template = request.notification_template
-        EmailService.send(
+        success, provider_response = EmailService.send(
             recipient: request.recipient,
             title: template.default_title,
             body: template.default_body
         )
 
-        request.update!(status: :sent, sent_at: Time.current)
+        if success
+            request.update!(status: :sent, sent_at: Time.current)
+        else
+            request.update!(status: :failed,  provider_response: provider_response)
+        end
     rescue => e
         Rails.logger.error("Error en NotificationSenderJob: #{e.message}")
         request.update!(status: :failed, provider_response: { error: e.message }) if request
