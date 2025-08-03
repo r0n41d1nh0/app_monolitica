@@ -7,12 +7,14 @@ class AbstractNotification
         raise NotImplementedError, "#{self.name} debe implementar el método .body"
     end
 
-    def self.send(recipient)
-        NotificationCenter.enqueue_request(
-            notification_key: self.key,
-            recipient: recipient,
-            channel: "EMAIL"
-        )
+    def self.send(recipient, channels: [ "EMAIL" ])
+        channels.each do |channel|
+            NotificationCenter.enqueue_request(
+                notification_key: self.key,
+                recipient: recipient,
+                channel: channel.upcase
+            )
+        end
     end
 
     def self.key

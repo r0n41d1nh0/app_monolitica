@@ -6,8 +6,13 @@ class NotificationSenderJob
         return unless request && request.queued?
         request.update!(status: :processing)
 
+        channel_service = ChannelFactory.for(request.channel)
+        unless channel_service
+            raise "Canal no soportado para: #{request.channel}"
+        end
+
         template = request.notification_template
-        success, provider_response = EmailService.send(
+        success, provider_response = channel_service.send(
             recipient: request.recipient,
             title: template.default_title,
             body: template.default_body
